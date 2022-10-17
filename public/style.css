@@ -1,10 +1,23 @@
-body {
-  padding: 1em 2em;
+
+
+
+html > * {
+  color: #FFFFFF;
+  background-color: #191414;
 }
+
+body {
+  display: table;
+  margin: auto;
+  text-align: center;
+  align-items: center;
+}
+
 ul.footer {
   list-style:none;
   display:inline;
 }
+
 ul.footer li {
   display:inline;
   margin-right: 1em;
@@ -28,4 +41,33 @@ td {
   border-radius: 50%;
   overflow: hidden;
   float: left;
+}
+
+.button {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  color: #FFFFFF;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.rec_button {
+  padding: 10px;
+  border-radius: 15px;
+}
+
+.accept:hover {
+  box-shadow: 0 5px 15px #1DB954;
+}
+
+.decline:hover {
+  box-shadow: 0 5px 15px #f84600;
+}
+
+.divider{
+  width:50px;
+  display:inline-block;
 }

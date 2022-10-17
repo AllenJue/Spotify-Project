@@ -1,23 +1,17 @@
 extends layout.pug
     
+    
 block content
-    h1 Recommendations
-
-    //- table 
-    //-   each r in recommended_songs
-    //-     tr 
-    - var rec_artist = recommended_song.artists[0].name
-    - var rec_name = recommended_song.name
-    - var rec_image = recommended_song.album.images[0].url
-    //- var rec_preview = r.
-    //- td(scope = "row")
-    img(src = rec_image)
-    h1 #{rec_name}
-    h2 #{rec_artist}
-    a(href='/update_recs?add=t')
-      button(type="button") Yes
-    a(href='/update_recs?add=f')
-      button(type="button") No
-
-
-          //td: a(href=track_preview) Preview
+    body
+      h1 Recommendations
+      - var rec_artist = recommended_song.artists[0].name
+      - var rec_name = recommended_song.name
+      - var rec_image = recommended_song.album.images[0].url
+      img(src = rec_image)
+      h1 #{rec_name}
+      h2 #{rec_artist}
+      a(href='/update_recs?add=t', class = 'button rec_button accept')
+        button(class="button") √
+      div(class = "divider")
+      a(href='/update_recs?add=f', class = 'button rec_button decline')
+        button(class="button") X

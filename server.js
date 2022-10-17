@@ -134,12 +134,13 @@ app.get("/generate_recs", async (req, res) => {
 app.get("/update_recs", async (req, res) => {
   const add = req.query.add;
   const removed_song = recommended_songs.pop();
-  console.log(removed_song);
+  // console.log(removed_song);
   if(add == 't') {
-    console.log("adding");
+    // console.log("adding");
   } else {
-    console.log("Not adding");
+    // console.log("Not adding");
   }
+  // TODO generate new songs when out of songs
   res.render("recommendation", { recommended_song: recommended_songs
     [recommended_songs.length - 1]});
 
