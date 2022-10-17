@@ -13,8 +13,9 @@ const client_id = "dbd1f18f1dc140debe467faba61bebb6";
 const client_secret = "f470901d0e0d400b9e937f09782746d0";
 const required_scopes = "user-library-read user-top-read playlist-modify-public playlist-modify-private playlist-read-collaborative playlist-read-private user-read-email user-read-private";
 
-// global list of recommended songs
+// global list of recommended songs and banned songs
 let recommended_songs = [];
+let banned_songs = new Set();
 let active_playlist_id = "";
 
 global.access_token;
@@ -95,14 +96,27 @@ app.get("/dashboard", async (req, res) => {
 });
 
 app.get("/generate_recs", async (req, res) => {
+  // only cleared the first time banned songs are generating for a playlist
+  banned_songs.clear();
   active_playlist_id = req.query.playlist_id;
   const playlist_data = await getData("/playlists/" + active_playlist_id);
   const tracks = playlist_data.tracks.items;
-  const banned_songs = new Set();
   for (var i = 0; i < tracks.length; i++) {
     banned_songs.add(tracks[i].track.id);
   }
   recommended_songs = [];
+  // shuffle tracks
+  await add_new_recs ();
+  // console.log(recommended_songs[recommended_songs.length - 1]);
+  res.render("recommendation", { recommended_song: recommended_songs
+    [recommended_songs.length - 1] });
+});
+
+/* Generates new recs with the active playlist and populates recommended songs 
+    with them */
+async function add_new_recs() {
+  const playlist_data = await getData("/playlists/" + active_playlist_id);
+  const tracks = playlist_data.tracks.items;
   // shuffle tracks
   tracks.sort(() => (Math.random() > .5) ? 1 : -1);
   for(var i = 0; i < tracks.length / 2 + 1; i++) {
@@ -126,10 +140,7 @@ app.get("/generate_recs", async (req, res) => {
       }
     }
   }
-  // console.log(recommended_songs[recommended_songs.length - 1]);
-  res.render("recommendation", { recommended_song: recommended_songs
-    [recommended_songs.length - 1] });
-});
+}
 
 app.get("/update_recs", async (req, res) => {
   const add = req.query.add;
@@ -141,6 +152,9 @@ app.get("/update_recs", async (req, res) => {
     // console.log("Not adding");
   }
   // TODO generate new songs when out of songs
+  if(recommended_songs.length == 0) {
+    await add_new_recs();
+  }
   res.render("recommendation", { recommended_song: recommended_songs
     [recommended_songs.length - 1]});
 

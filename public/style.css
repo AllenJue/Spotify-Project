@@ -9,7 +9,6 @@ html > * {
 body {
   display: table;
   margin: auto;
-  text-align: center;
   align-items: center;
 }
 
