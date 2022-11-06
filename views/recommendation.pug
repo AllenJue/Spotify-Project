@@ -6,7 +6,7 @@ block content
       h1 Recommendations
       - var rec_artist = recommended_song.artists[0].name
       - var rec_name = recommended_song.name
-      - var rec_image = recommended_song.album.images[0].url
+      - var rec_image = recommended_song.album.images[1].url
       img(src = rec_image)
       h1 #{rec_name}
       h2 #{rec_artist}

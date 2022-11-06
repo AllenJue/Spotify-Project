@@ -10,6 +10,7 @@ body {
   display: table;
   margin: auto;
   align-items: center;
+  width: 50%
 }
 
 ul.footer {
