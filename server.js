@@ -130,6 +130,7 @@ async function add_new_recs() {
   const RANDOMIZE_HALF = 0.5;
   tracks.sort(() => (Math.random() > RANDOMIZE_HALF) ? 1 : -1);
   while (recommended_songs.length < MIN_SONGS) {
+    // pick a random song
     var i = Math.floor(Math.random() * tracks.length); 
     const artist_id = tracks[i].track.artists[0].id;
     const artist_data = await getData("/artists/" + artist_id);
@@ -142,9 +143,11 @@ async function add_new_recs() {
         seed_genres: seed_genres,
         seed_tracks: seed_tracks
       });
+      // find recommendations, and add them to the list
       const recommendations = await getData("/recommendations?" + params);
       for (var j = 0; j < recommendations.tracks.length; j++) {
-        if (!banned_songs.has(recommendations.tracks[j].id)) {
+        if (!banned_songs.has(recommendations.tracks[j].id) 
+            && recommendations.tracks[j].preview_url != null) {
           recommended_songs.push(recommendations.tracks[j]);
           banned_songs.add(recommendations.tracks[j].id);
         }
@@ -153,18 +156,19 @@ async function add_new_recs() {
   }
 }
 
+
 async function addSong(songURI) {
-  var url = "https://api.spotify.com/v1/playlists/" + active_playlist_id + "/tracks?uris=" + songURI.replaceAll(":", "%3A");
-  
-  const response = await fetch(url, {
+  // for some reason need to replace ':' with "%3A"
+  var url = "https://api.spotify.com/v1/playlists/" + active_playlist_id + 
+      "/tracks?uris=" + songURI.replaceAll(":", "%3A");
+  // call the post command to add a song to the playlist
+  const response = await fetch (url, {
     method: "post",
     headers: {
       "Content-type": "application/json",
       Authorization: "Bearer " + global.access_token,
     },
   });
-  // console.log(songURI);
-  // console.log(response);
 }
 
 app.get("/update_recs", async (req, res) => {
@@ -177,12 +181,13 @@ app.get("/update_recs", async (req, res) => {
     console.log(removed_song);
     await addSong(removed_song.uri);
   } else {
-    // console.log("Not adding");
+    console.log("Not adding");
   }
   // generate new songs when out of songs
   if(recommended_songs.length == 0) {
     await add_new_recs();
   }
+  console.log(recommended_songs[recommended_songs.length - 1].preview_url);
   res.render("recommendation", { recommended_song: recommended_songs
     [recommended_songs.length - 1]});
 
