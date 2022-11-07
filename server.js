@@ -18,6 +18,7 @@ const MIN_SONGS = 10;
 let recommended_songs = [];
 let banned_songs = new Set();
 let active_playlist_id = "";
+let user_id = "";
 global.access_token;
 
 app.get("/", function (req, res) {
@@ -90,14 +91,18 @@ async function getData(endpoint) {
 app.get("/dashboard", async (req, res) => {
   const userInfo = await getData("/me");
   const tracks = await getData("/me/tracks?limit=10");
+  user_id = userInfo.id;
   // get user playlists
   const user_playlists = await getData("/users/" + userInfo.id + "/playlists");
-  for (var i = 0; i < user_playlists.items.length; i++) {
-    
-  }
   // render dashboard w/ userInfo, tracks, and playlists
+  let playlists_owned_by_user = [];
+  for (var i = 0; i < user_playlists.items.length; i++) {
+    if(user_playlists.items[i].owner.id == user_id) {
+      playlists_owned_by_user.push(user_playlists.items[i]);
+    }
+  }
   res.render("dashboard", { user: userInfo, tracks: tracks.items,
-      playlists: user_playlists.items});
+      playlists: playlists_owned_by_user});
 });
 
 /* Generates all the recommendations given a playlist. Selects songs randomly 
