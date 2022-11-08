@@ -9,8 +9,8 @@ app.set("view engine", "pug");
 app.use(express.static("public"));
 
 const redirect_uri = "http://localhost:3000/callback";
-const client_id = "dbd1f18f1dc140debe467faba61bebb6";
-const client_secret = "f470901d0e0d400b9e937f09782746d0";
+const client_id = "";
+const client_secret = "";
 const required_scopes = "user-library-read user-top-read playlist-modify-public playlist-modify-private playlist-read-collaborative playlist-read-private user-read-email user-read-private user-top-read";
 
 const MIN_SONGS = 10;
