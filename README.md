@@ -6,8 +6,8 @@ Findify is a Spotify web app that generates recommendations based on the frequen
 
 # Technologies
 
-Express.js
-Jade
+* Express.js
+* Jade
 
 # Features
 
